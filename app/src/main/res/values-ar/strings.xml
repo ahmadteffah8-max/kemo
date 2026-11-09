@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Simple Player</string>
+    <string name="app_name">Simple</string>
     <string name="tagline">صوت وفيديو، خفيف وسريع</string>
     <string name="open_files">فتح ملفات</string>
     <string name="now_playing">قيد التشغيل</string>

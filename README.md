@@ -1,4 +1,4 @@
-# Simple Player
+# Simple
 
 مشغل صوت وفيديو بسيط وخفيف وسريع لأندرويد (Android 7.0+)، مبني على AndroidX Media3 ExoPlayer.
 بدون إعلانات، بدون إنترنت، بدون حساب.

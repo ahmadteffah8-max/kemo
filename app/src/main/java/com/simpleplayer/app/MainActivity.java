@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
         i.addCategory(Intent.CATEGORY_OPENABLE);
         i.setType("*/*");
         i.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
-                "audio/*", "video/*", "application/ogg", "application/x-matroska"});
+                "audio/*", "video/*", "application/ogg", "application/x-ogg", "application/x-matroska"});
         i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(i, REQ_PICK);
     }

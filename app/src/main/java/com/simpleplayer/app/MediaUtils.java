@@ -50,7 +50,7 @@ final class MediaUtils {
         }
         if (mime != null) {
             mime = mime.toLowerCase(Locale.US);
-            if (mime.startsWith("audio/") || mime.equals("application/ogg")) return TYPE_AUDIO;
+            if (mime.startsWith("audio/") || mime.equals("application/ogg") || mime.equals("application/x-ogg")) return TYPE_AUDIO;
             if (mime.startsWith("video/")) return TYPE_VIDEO;
         }
 
