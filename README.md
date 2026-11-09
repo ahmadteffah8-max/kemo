@@ -1,24 +1,28 @@
-# KEMO — Neon Pixel Calculator (ORIGINA)
+# Simple Player
 
-Android 9+ (minSdk 28) calculator with an original pixel-art digital girl, liquid-glass keys,
-neon ripples, pixel explosions and an original electronic sound set + chiptune BGM.
-Pure Android framework (no libraries) → small and fast, runs well on weak phones.
+مشغل صوت وفيديو بسيط وخفيف وسريع لأندرويد (Android 7.0+)، مبني على AndroidX Media3 ExoPlayer.
+بدون إعلانات، بدون إنترنت، بدون حساب.
 
-## الحصول على APK (أسهل طريقة — GitHub Actions)
-1. ارفع كل محتويات هذا المجلد إلى مستودع `kemo` (فرع `main`).
-2. افتح تبويب **Actions** → سيعمل `Build KEMO APK` تلقائياً (حوالي 3–5 دقائق).
-3. بعد النجاح، حمّل الـ APK من:
-   `https://github.com/<USER>/kemo/releases/latest/download/kemo.apk`
-   (أو من Actions → آخر تشغيل → Artifacts → `kemo-apk`).
+A simple, light and fast audio/video player for Android, built on AndroidX Media3 ExoPlayer.
+No ads, no internet permission, no account.
 
-## أو عبر Android Studio
-File → Open → اختر هذا المجلد → انتظر Sync → Build → Build APK(s).
+## الواجهتان / Two separate UIs
 
-## الهيكل
-- `app/src/main/java/com/kemo/calc/` — الكود (Calc = المحرك، KemoView = الشخصية، GlassButton، DisplayView، FxView، SoundManager…)
-- `app/src/main/res/raw/` — الأصوات (مولّدة بالكود، أصلية)
-- `tools/gen_sprites.py`, `tools/gen_sounds.py` — سكربتات توليد الشخصية والأصوات (يمكن تعديلها وإعادة تشغيلها: `python3 tools/gen_sounds.py .`)
+التطبيق يكتشف نوع الملف تلقائياً ويفتح الواجهة المناسبة ولا يخلط بينهما.
 
-## التحكم بالصوت
-زر ♪ أعلى اليمين: مستوى مستقل لكل من: الكبسات، الحذف، النتيجة، المسح، الموسيقى.
-اضغط مطولاً على زر الحذف لمسح كل شيء.
+- **الموسيقى (MP3, OGG, WAV, FLAC, AAC, M4A):** غلاف كبير مربع، اسم الأغنية والفنان، تشغيل/إيقاف، السابق/التالي، شريط التقدم والمدة، التحكم بالصوت.
+- **الفيديو (MP4, MKV, MOV, WEBM):** ملء الشاشة، أفقي وعمودي، Zoom بالقرص، ضغطتان يميناً +10 ثوانٍ ويساراً -10 ثوانٍ، زر سرعة ×2 / ×1، الصوت، شريط التقدم، ملاءمة/ملء، وزر ملء الشاشة.
+
+## البناء / Build
+
+```
+gradle assembleRelease
+```
+
+الناتج: `app/build/outputs/apk/release/app-release.apk`
+
+كل دفعة (push) إلى `main` تبني الـ APK تلقائياً عبر GitHub Actions وتنشره في **Releases → latest** باسم `simple-player.apk`.
+
+## ملاحظة / Note
+
+AVI: لا يدعمه Media3 مباشرةً إلا لبعض الملفات (الصيغ الداخلية غير المدعومة تُظهر رسالة خطأ).

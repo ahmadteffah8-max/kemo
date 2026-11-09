@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="315"
+                android:endColor="#14231B"
+                android:startColor="#3F7A5C" />
+        </shape>
+    </item>
+    <item
+        android:width="110dp"
+        android:height="110dp"
+        android:drawable="@drawable/ic_music_note"
+        android:gravity="center" />
+</layer-list>

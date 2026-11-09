@@ -1,4 +1,4 @@
-name: Build KEMO APK
+name: Build Simple Player APK
 
 on:
   push:
@@ -26,26 +26,28 @@ jobs:
         with:
           gradle-version: 8.7
 
-      - name: Build release + debug APK
-        run: gradle --no-daemon assembleRelease assembleDebug
+      - name: Build release APK
+        run: gradle --no-daemon assembleRelease
 
       - name: Collect APK
         run: |
           mkdir -p dist
-          cp app/build/outputs/apk/release/app-release.apk dist/kemo.apk
-          cp app/build/outputs/apk/debug/app-debug.apk dist/kemo-debug.apk
+          cp app/build/outputs/apk/release/app-release.apk dist/simple-player.apk
 
       - uses: actions/upload-artifact@v4
         with:
-          name: kemo-apk
-          path: dist/*.apk
+          name: simple-player-apk
+          path: dist/simple-player.apk
+
+      - name: Remove previous "latest" release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release delete latest --cleanup-tag --yes || true
 
       - name: Publish release (direct download link)
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: KEMO APK (latest)
-          body: "Direct download: kemo.apk — install on Android 9+."
-          files: |
-            dist/kemo.apk
-            dist/kemo-debug.apk
+          name: Simple Player APK (latest)
+          body: "Direct download: simple-player.apk (Android 7.0+)."
+          files: dist/simple-player.apk

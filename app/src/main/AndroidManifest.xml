@@ -1,28 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:supportsRtl="false"
         android:theme="@style/AppTheme">
 
+        <!-- Home: pick files, or receive "Open with" from other apps. Routes by file type. -->
         <activity
-            android:name=".SplashActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+                <data android:mimeType="audio/*" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
         </activity>
 
+        <!-- Music UI (portrait). -->
         <activity
-            android:name=".MainActivity"
+            android:name=".MusicPlayerActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait" />
+
+        <!-- Video UI (portrait + landscape, handles rotation without restarting playback). -->
+        <activity
+            android:name=".VideoPlayerActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode"
+            android:exported="false"
+            android:theme="@style/VideoTheme" />
     </application>
 </manifest>

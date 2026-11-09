@@ -1,3 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">KEMO</string>
+    <string name="app_name">Simple Player</string>
+    <string name="tagline">Audio and video, light and fast</string>
+    <string name="open_files">Open files</string>
+    <string name="now_playing">Now playing</string>
+    <string name="unknown_artist">Unknown artist</string>
+    <string name="unsupported_file">Unsupported file type</string>
+    <string name="play_error">Can\'t play this file</string>
+    <string name="mode_fit">Fit to screen</string>
+    <string name="mode_fill">Fill screen</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_play">Play / Pause</string>
+    <string name="cd_previous">Previous</string>
+    <string name="cd_next">Next</string>
+    <string name="cd_volume">Volume</string>
+    <string name="cd_speed">Playback speed</string>
+    <string name="cd_aspect">Fit / Fill</string>
+    <string name="cd_fullscreen">Full screen</string>
 </resources>

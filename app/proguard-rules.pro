@@ -1,1 +1,1 @@
-# no special rules needed
+# Media3 ships its own consumer rules.

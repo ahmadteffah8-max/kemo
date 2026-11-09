@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simple Player</string>
+    <string name="tagline">صوت وفيديو، خفيف وسريع</string>
+    <string name="open_files">فتح ملفات</string>
+    <string name="now_playing">قيد التشغيل</string>
+    <string name="unknown_artist">فنان غير معروف</string>
+    <string name="unsupported_file">نوع الملف غير مدعوم</string>
+    <string name="play_error">تعذّر تشغيل هذا الملف</string>
+    <string name="mode_fit">ملاءمة الشاشة</string>
+    <string name="mode_fill">ملء الشاشة</string>
+    <string name="cd_back">رجوع</string>
+    <string name="cd_play">تشغيل / إيقاف</string>
+    <string name="cd_previous">السابق</string>
+    <string name="cd_next">التالي</string>
+    <string name="cd_volume">الصوت</string>
+    <string name="cd_speed">سرعة التشغيل</string>
+    <string name="cd_aspect">ملاءمة / ملء</string>
+    <string name="cd_fullscreen">ملء الشاشة</string>
+</resources>

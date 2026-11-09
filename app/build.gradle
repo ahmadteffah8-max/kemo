@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    namespace 'com.kemo.calc'
+    namespace 'com.simpleplayer.app'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.kemo.calc"
-        minSdk 28          // Android 9+
+        applicationId "com.simpleplayer.app"
+        minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -19,7 +19,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            // signed with the debug key so the APK installs directly (replace for Play Store)
+            // Signed with the debug key so the APK installs directly.
             signingConfig signingConfigs.debug
         }
     }
@@ -33,12 +33,9 @@ android {
         abortOnError false
         checkReleaseBuilds false
     }
-
-    androidResources {
-        noCompress 'wav'
-    }
 }
 
 dependencies {
-    // intentionally empty: pure Android framework => tiny & fast APK
+    // Only the ExoPlayer core: no UI module, no appcompat/material => small and light.
+    implementation 'androidx.media3:media3-exoplayer:1.4.1'
 }
