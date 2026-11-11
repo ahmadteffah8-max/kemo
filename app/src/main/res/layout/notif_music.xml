@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Music notification content: the floating cat on the far left, file name, one play/pause button.
+     Only classes allowed in RemoteViews are used. The cat floats because the ViewFlipper cycles
+     through 20 frames of the same picture at slightly different positions. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:layout_width="48dp"
+        android:layout_height="48dp">
+
+        <ViewFlipper
+            android:id="@+id/catFlipper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autoStart="true"
+            android:flipInterval="150">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="1.69"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="0.65dp"
+                android:translationY="0.00dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="2.38"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="0.30dp"
+                android:translationY="1.08dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="2.83"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-0.07dp"
+                android:translationY="2.06dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="3.00"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-0.44dp"
+                android:translationY="2.83dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="2.88"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-0.76dp"
+                android:translationY="3.33dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="2.48"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-1.01dp"
+                android:translationY="3.50dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="1.83"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-1.16dp"
+                android:translationY="3.33dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="1.01"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-1.20dp"
+                android:translationY="2.83dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="0.08"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-1.12dp"
+                android:translationY="2.06dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-0.85"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-0.93dp"
+                android:translationY="1.08dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-1.69"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-0.65dp"
+                android:translationY="0.00dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-2.38"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="-0.30dp"
+                android:translationY="-1.08dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-2.83"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="0.07dp"
+                android:translationY="-2.06dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-3.00"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="0.44dp"
+                android:translationY="-2.83dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-2.88"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="0.76dp"
+                android:translationY="-3.33dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-2.48"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="1.01dp"
+                android:translationY="-3.50dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-1.83"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="1.16dp"
+                android:translationY="-3.33dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-1.01"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="1.20dp"
+                android:translationY="-2.83dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="-0.08"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="1.12dp"
+                android:translationY="-2.06dp" />
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:rotation="0.85"
+                android:scaleType="fitCenter"
+                android:src="@drawable/cat_bag"
+                android:translationX="0.93dp"
+                android:translationY="-1.08dp" />
+        </ViewFlipper>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/notifTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <ImageButton
+        android:id="@+id/notifToggle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bg_notif_btn"
+        android:contentDescription="@string/music_notif_pause"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_pause" />
+</LinearLayout>

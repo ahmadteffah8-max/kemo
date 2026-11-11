@@ -62,6 +62,7 @@ public class VideoPlayerActivity extends Activity {
     private boolean controlsVisible = true;
     private boolean dragging;
     private boolean fast;
+    private boolean holding; // finger held on the screen => temporary 2x
     private boolean fillMode;
 
     private float zoom = 1f, panX, panY;
@@ -296,6 +297,19 @@ public class VideoPlayerActivity extends Activity {
             }
 
             @Override
+            public void onLongPress(MotionEvent e) {
+                // Press and hold anywhere: plays at 2x until the finger is lifted.
+                if (busyPinching() || e.getPointerCount() > 1 || player == null || holding) return;
+                holding = true;
+                skipConfirm = true;
+                player.setPlaybackParameters(new PlaybackParameters(2f));
+                handler.removeCallbacks(hideRight);
+                seekRight.animate().cancel();
+                seekRight.setText("×2");
+                seekRight.setAlpha(1f);
+            }
+
+            @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float dx, float dy) {
                 if (busyPinching() || e2.getPointerCount() > 1) return false;
                 panX -= dx;
@@ -304,13 +318,28 @@ public class VideoPlayerActivity extends Activity {
                 return true;
             }
         });
-        gestures.setIsLongpressEnabled(false);
+        gestures.setIsLongpressEnabled(true);
 
         root.setOnTouchListener((v, e) -> {
+            int a = e.getActionMasked();
+            // A second finger (pinch) or lifting the finger ends the temporary 2x.
+            if (a == MotionEvent.ACTION_UP || a == MotionEvent.ACTION_CANCEL
+                    || a == MotionEvent.ACTION_POINTER_DOWN) {
+                endHold();
+            }
             scaler.onTouchEvent(e);
             gestures.onTouchEvent(e);
             return true;
         });
+    }
+
+    /** Back to the normal speed (or the x2 button's speed) after a press-and-hold. */
+    private void endHold() {
+        if (!holding) return;
+        holding = false;
+        if (player != null) player.setPlaybackParameters(new PlaybackParameters(fast ? 2f : 1f));
+        seekRight.setText("+10");
+        fadeOut(seekRight);
     }
 
     private boolean busyPinching() {
@@ -522,6 +551,7 @@ public class VideoPlayerActivity extends Activity {
 
     @Override
     protected void onPause() {
+        endHold();
         if (player != null) player.pause();
         super.onPause();
     }

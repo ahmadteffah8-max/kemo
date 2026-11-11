@@ -2,7 +2,10 @@ package com.simpleplayer.app;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -17,8 +20,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * A new media file saved to the public "Simple" folder (Movies/Simple or Music/Simple) on
- * Android 10+, or to the app's own external folder on older versions (no storage permission).
+ * A new media file saved to the public "Simple" folder (Movies/Simple or Music/Simple).
+ * Android 10+ uses MediaStore (no permission). Android 9 and older write straight to the public
+ * folder, which needs the storage permission; without it the file goes to the app's own hidden
+ * folder as a last resort.
  */
 final class MediaOutput {
 
@@ -27,13 +32,28 @@ final class MediaOutput {
     /** Only set on Android 9 and older. */
     final File file;
     private final Context context;
+    private final String mime;
+    private final String shownPath;
     private ParcelFileDescriptor pfd;
 
-    private MediaOutput(Context c, Uri uri, File file, boolean audio) {
+    private MediaOutput(Context c, Uri uri, File file, boolean audio, String mime, String shownPath) {
         this.context = c.getApplicationContext();
         this.uri = uri;
         this.file = file;
         this.audio = audio;
+        this.mime = mime;
+        this.shownPath = shownPath;
+    }
+
+    /** True on Android 9 and older when the storage permission is still missing. */
+    static boolean needsStoragePermission(Context c) {
+        return Build.VERSION.SDK_INT < 29 && c.checkSelfPermission(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED;
+    }
+
+    /** Human readable place of the file, e.g. "Movies/Simple/Screen_20260101_120000.mp4". */
+    String displayPath() {
+        return shownPath;
     }
 
     static MediaOutput create(Context c, String displayName, String mime, boolean audio)
@@ -50,15 +70,27 @@ final class MediaOutput {
                     : MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
             Uri uri = c.getContentResolver().insert(collection, v);
             if (uri == null) throw new IOException("MediaStore insert failed");
-            return new MediaOutput(c, uri, null, audio);
+            String rel = (audio ? Environment.DIRECTORY_MUSIC : Environment.DIRECTORY_MOVIES)
+                    + "/Simple/" + displayName;
+            return new MediaOutput(c, uri, null, audio, mime, rel);
         }
-        File dir = c.getExternalFilesDir(
-                audio ? Environment.DIRECTORY_MUSIC : Environment.DIRECTORY_MOVIES);
+
+        String type = audio ? Environment.DIRECTORY_MUSIC : Environment.DIRECTORY_MOVIES;
+        File dir = null;
+        if (!needsStoragePermission(c)) {
+            // Public folder: shows up in the gallery / music apps and any file manager.
+            File pub = new File(Environment.getExternalStoragePublicDirectory(type), "Simple");
+            if (pub.isDirectory() || pub.mkdirs()) dir = pub;
+        }
+        if (dir == null) dir = c.getExternalFilesDir(type);
         if (dir == null) dir = c.getFilesDir();
         //noinspection ResultOfMethodCallIgnored
         dir.mkdirs();
         File f = new File(dir, displayName);
-        return new MediaOutput(c, Uri.fromFile(f), f, audio);
+        String shown = f.getAbsolutePath();
+        String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/";
+        if (shown.startsWith(root)) shown = shown.substring(root.length());
+        return new MediaOutput(c, Uri.fromFile(f), f, audio, mime, shown);
     }
 
     /** Descriptor for MediaMuxer on Android 10+ (null when {@link #file} is used). */
@@ -95,8 +127,14 @@ final class MediaOutput {
         ContentResolver cr = context.getContentResolver();
         try {
             if (file != null) {
-                if (!ok) //noinspection ResultOfMethodCallIgnored
+                if (!ok) {
+                    //noinspection ResultOfMethodCallIgnored
                     file.delete();
+                } else {
+                    // Tell the gallery / music apps about the new file right away.
+                    MediaScannerConnection.scanFile(context,
+                            new String[]{file.getAbsolutePath()}, new String[]{mime}, null);
+                }
             } else if (ok) {
                 if (Build.VERSION.SDK_INT >= 29) {
                     ContentValues v = new ContentValues();

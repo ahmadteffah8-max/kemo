@@ -181,6 +181,7 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/systemSub"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/rec_opt_system_sub"

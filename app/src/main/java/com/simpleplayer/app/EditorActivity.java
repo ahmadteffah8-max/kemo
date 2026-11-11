@@ -1,5 +1,6 @@
 package com.simpleplayer.app;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -54,6 +55,7 @@ import java.util.Locale;
 public class EditorActivity extends Activity {
 
     private static final int REQ_PICK = 1;
+    private static final int REQ_STORAGE = 2;
     private static final int MODE_VIDEO = 0, MODE_MUTE = 1, MODE_AUDIO = 2;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -381,6 +383,26 @@ public class EditorActivity extends Activity {
 
     private void save() {
         if (uri == null || exporting) return;
+        // Android 9 and older: the public Simple folder needs the storage permission.
+        if (MediaOutput.needsStoragePermission(this)) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQ_STORAGE);
+            return;
+        }
+        doSave();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int code, String[] perms, int[] results) {
+        super.onRequestPermissionsResult(code, perms, results);
+        if (code != REQ_STORAGE) return;
+        if (MediaOutput.needsStoragePermission(this)) {
+            Toast.makeText(this, R.string.rec_storage_denied, Toast.LENGTH_LONG).show();
+        }
+        doSave();
+    }
+
+    private void doSave() {
+        if (uri == null || exporting) return;
         long s = trimBar.getStartMs(), e = trimBar.getEndMs();
         boolean trimmed = s > 50 || e < durationMs - 50;
         boolean audioOnly = mode == MODE_AUDIO;
@@ -556,7 +578,7 @@ public class EditorActivity extends Activity {
     private void showDone(final MediaOutput out) {
         new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert)
                 .setTitle(R.string.ed_done)
-                .setMessage(R.string.ed_done_msg)
+                .setMessage(getString(R.string.ed_done_msg_path, out.displayPath()))
                 .setPositiveButton(R.string.ed_play, (d, w) -> {
                     ArrayList<Uri> list = new ArrayList<>();
                     list.add(out.uri);

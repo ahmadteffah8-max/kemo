@@ -67,4 +67,10 @@
     <string name="ed_zoom_out">Zoom out timeline</string>
     <string name="ed_nothing">Nothing to change: choose a range, crop, or another mode</string>
     <string name="cd_play_pause">Play / Pause</string>
+    <string name="rec_system_old">Device sound needs Android 10 or newer</string>
+    <string name="rec_saved_in">Saved in: %1$s</string>
+    <string name="rec_storage_denied">Storage permission denied: the file will be saved in a hidden app folder</string>
+    <string name="ed_done_msg_path">Saved in:\n%1$s</string>
+    <string name="music_notif_channel">Music playback</string>
+    <string name="music_notif_pause">Pause / Play</string>
 </resources>

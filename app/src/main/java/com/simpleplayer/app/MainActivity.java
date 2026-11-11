@@ -31,6 +31,8 @@ public class MainActivity extends Activity {
     private static final int REQ_PICK = 1;
     private static final String PREFS = "simple_prefs";
     private static final String KEY_MUTED = "bg_muted";
+    /** The home-screen music plays 10% quieter than full volume. */
+    private static final float BG_VOLUME = 0.9f;
 
     private TextureView bgView;
     private ImageButton muteBtn;
@@ -130,7 +132,7 @@ public class MainActivity extends Activity {
                 .buildUpon()
                 .setTrackTypeDisabled(C.TRACK_TYPE_AUDIO, muted)
                 .build());
-        bgPlayer.setVolume(muted ? 0f : 1f);
+        bgPlayer.setVolume(muted ? 0f : BG_VOLUME);
     }
 
     private void updateMuteIcon() {
@@ -173,6 +175,14 @@ public class MainActivity extends Activity {
             for (int i = 0; i < clip.getItemCount(); i++) picked.add(clip.getItemAt(i).getUri());
         } else if (data.getData() != null) {
             picked.add(data.getData());
+        }
+        for (Uri u : picked) {
+            try {
+                getContentResolver().takePersistableUriPermission(u,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } catch (Throwable ignored) {
+                // not every provider allows it; playback still works while the app is open
+            }
         }
         if (!openMedia(picked)) {
             Toast.makeText(this, R.string.unsupported_file, Toast.LENGTH_SHORT).show();

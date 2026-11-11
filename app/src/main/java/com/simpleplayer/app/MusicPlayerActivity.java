@@ -1,13 +1,21 @@
 package com.simpleplayer.app;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.view.KeyEvent;
 import android.widget.ImageButton;
@@ -25,14 +33,18 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/** Music UI: big square cover, title/artist, progress, transport controls and volume. */
+/**
+ * Music UI: big square cover, title/artist, progress, transport controls and volume.
+ * The player itself lives in {@link MusicService}, so music keeps playing in the background.
+ */
 public class MusicPlayerActivity extends Activity {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final ExecutorService metaExecutor = Executors.newSingleThreadExecutor();
 
-    private ExoPlayer player;
+    private ExoPlayer player; // owned by MusicService; null until connected
     private ArrayList<Uri> uris;
+    private boolean bound;
 
     private SquareImageView cover;
     private TextView title, artist, timeCur, timeDur;
@@ -74,8 +86,12 @@ public class MusicPlayerActivity extends Activity {
 
         findViewById(R.id.backBtn).setOnClickListener(v -> finish());
         playBtn.setOnClickListener(v -> togglePlay());
-        prevBtn.setOnClickListener(v -> player.seekToPrevious());
-        nextBtn.setOnClickListener(v -> player.seekToNext());
+        prevBtn.setOnClickListener(v -> {
+            if (player != null) player.seekToPrevious();
+        });
+        nextBtn.setOnClickListener(v -> {
+            if (player != null) player.seekToNext();
+        });
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -90,55 +106,77 @@ public class MusicPlayerActivity extends Activity {
 
             @Override
             public void onStopTrackingTouch(SeekBar s) {
-                player.seekTo(s.getProgress());
+                if (player != null) player.seekTo(s.getProgress());
                 dragging = false;
             }
         });
 
-        player = MediaUtils.newPlayer(this, false);
-        for (Uri u : uris) player.addMediaItem(MediaItem.fromUri(u));
-        player.addListener(new Player.Listener() {
-            @Override
-            public void onPlaybackStateChanged(int state) {
-                updateUi();
-                updateProgress();
-            }
+        if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(
+                Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 20);
+        }
 
-            @Override
-            public void onPlayWhenReadyChanged(boolean playWhenReady, int reason) {
-                updateUi();
-            }
-
-            @Override
-            public void onIsPlayingChanged(boolean isPlaying) {
-                updateUi();
-            }
-
-            @Override
-            public void onMediaItemTransition(MediaItem item, int reason) {
-                loadMeta(player.getCurrentMediaItemIndex());
-                updateUi();
-                updateProgress();
-            }
-
-            @Override
-            public void onPlayerError(PlaybackException error) {
-                Toast.makeText(MusicPlayerActivity.this, R.string.play_error,
-                        Toast.LENGTH_SHORT).show();
-                if (player.hasNextMediaItem()) {
-                    player.seekToNextMediaItem();
-                    player.prepare();
-                    player.play();
-                }
-            }
-        });
-        player.prepare();
-        player.play();
-        loadMeta(0);
+        // Start (or continue) playback in the service and connect to its player.
+        Intent svc = new Intent(this, MusicService.class)
+                .setAction(MusicService.ACTION_PLAY)
+                .putParcelableArrayListExtra(MediaUtils.EXTRA_URIS, uris);
+        if (Build.VERSION.SDK_INT >= 26) startForegroundService(svc);
+        else startService(svc);
+        bound = bindService(new Intent(this, MusicService.class), connection,
+                Context.BIND_AUTO_CREATE);
         updateUi();
     }
 
+    private final Player.Listener playerListener = new Player.Listener() {
+        @Override
+        public void onPlaybackStateChanged(int state) {
+            updateUi();
+            updateProgress();
+        }
+
+        @Override
+        public void onPlayWhenReadyChanged(boolean playWhenReady, int reason) {
+            updateUi();
+        }
+
+        @Override
+        public void onIsPlayingChanged(boolean isPlaying) {
+            updateUi();
+        }
+
+        @Override
+        public void onMediaItemTransition(MediaItem item, int reason) {
+            if (player != null) loadMeta(player.getCurrentMediaItemIndex());
+            updateUi();
+            updateProgress();
+        }
+
+        @Override
+        public void onPlayerError(PlaybackException error) {
+            Toast.makeText(MusicPlayerActivity.this, R.string.play_error,
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private final ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            player = ((MusicService.LocalBinder) binder).service().getPlayer();
+            if (player == null) return;
+            player.addListener(playerListener);
+            loadMeta(Math.max(0, player.getCurrentMediaItemIndex()));
+            updateUi();
+            updateProgress();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            player = null;
+        }
+    };
+
     private void togglePlay() {
+        if (player == null) return;
         int state = player.getPlaybackState();
         if (state == Player.STATE_ENDED) {
             player.seekTo(0, 0);
@@ -259,8 +297,13 @@ public class MusicPlayerActivity extends Activity {
         handler.removeCallbacksAndMessages(null);
         metaExecutor.shutdownNow();
         if (player != null) {
-            player.release();
+            player.removeListener(playerListener);
             player = null;
+        }
+        // The service (and the music) keeps going after the screen is closed.
+        if (bound) {
+            unbindService(connection);
+            bound = false;
         }
         super.onDestroy();
     }

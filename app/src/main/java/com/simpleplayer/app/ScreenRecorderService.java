@@ -195,7 +195,8 @@ public class ScreenRecorderService extends Service {
             recorder = null;
             stopForeground(true);
             if (ok) {
-                Toast.makeText(this, R.string.rec_saved, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.rec_saved_in, out.displayPath()),
+                        Toast.LENGTH_LONG).show();
                 postDone(out);
             } else {
                 Toast.makeText(this, R.string.rec_failed, Toast.LENGTH_LONG).show();
@@ -264,6 +265,7 @@ public class ScreenRecorderService extends Service {
             Notification n = builder(CHANNEL_DONE)
                     .setSmallIcon(R.drawable.ic_record)
                     .setContentTitle(getString(R.string.rec_saved_tap))
+                    .setContentText(out.displayPath())
                     .setContentIntent(pi)
                     .setAutoCancel(true)
                     .build();

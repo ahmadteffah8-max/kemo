@@ -67,4 +67,10 @@
     <string name="ed_zoom_out">تصغير الشريط</string>
     <string name="ed_nothing">لا يوجد تغيير: حدّد مقطعاً أو قصّ الأبعاد أو اختر وضعاً آخر</string>
     <string name="cd_play_pause">تشغيل / إيقاف</string>
+    <string name="rec_system_old">صوت الجهاز يحتاج أندرويد 10 أو أحدث</string>
+    <string name="rec_saved_in">تم الحفظ في: %1$s</string>
+    <string name="rec_storage_denied">تم رفض إذن التخزين: سيُحفظ الملف في مجلد مخفي للتطبيق</string>
+    <string name="ed_done_msg_path">تم الحفظ في:\n%1$s</string>
+    <string name="music_notif_channel">تشغيل الموسيقى</string>
+    <string name="music_notif_pause">إيقاف مؤقت / تشغيل</string>
 </resources>

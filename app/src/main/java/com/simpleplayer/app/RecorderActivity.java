@@ -71,8 +71,10 @@ public class RecorderActivity extends Activity {
         systemSwitch.setChecked(p.getBoolean("rec_system", true) && Build.VERSION.SDK_INT >= 29);
         micSwitch.setChecked(p.getBoolean("rec_mic", false));
         if (Build.VERSION.SDK_INT < 29) {
+            // Android 9 and older cannot capture the sound of other apps (system limit).
             systemSwitch.setEnabled(false);
             systemSwitch.setChecked(false);
+            ((TextView) findViewById(R.id.systemSub)).setText(R.string.rec_system_old);
         }
         limitRow.setVisibility(limitSwitch.isChecked() ? View.VISIBLE : View.GONE);
         limitSwitch.setOnCheckedChangeListener((b, on) ->
@@ -170,6 +172,9 @@ public class RecorderActivity extends Activity {
                 != PackageManager.PERMISSION_GRANTED) {
             need.add(Manifest.permission.RECORD_AUDIO);
         }
+        if (MediaOutput.needsStoragePermission(this)) {
+            need.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
         if (Build.VERSION.SDK_INT >= 33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
             need.add(Manifest.permission.POST_NOTIFICATIONS);
@@ -191,6 +196,9 @@ public class RecorderActivity extends Activity {
             Toast.makeText(this, R.string.rec_need_mic, Toast.LENGTH_LONG).show();
             micSwitch.setChecked(false);
             systemSwitch.setChecked(false);
+        }
+        if (MediaOutput.needsStoragePermission(this)) {
+            Toast.makeText(this, R.string.rec_storage_denied, Toast.LENGTH_LONG).show();
         }
         requestCapture();
     }
