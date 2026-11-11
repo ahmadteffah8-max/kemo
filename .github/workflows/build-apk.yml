@@ -2,7 +2,7 @@ name: Build Simple Player APK
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ '**' ]
   workflow_dispatch:
 
 permissions:
@@ -40,11 +40,13 @@ jobs:
           path: dist/simple-player.apk
 
       - name: Remove previous "latest" release
+        if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release delete latest --cleanup-tag --yes || true
 
       - name: Publish release (direct download link)
+        if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest

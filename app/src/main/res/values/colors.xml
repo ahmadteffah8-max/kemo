@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg">#121212</color>
-    <color name="accent">#1ED760</color>
+    <color name="bg">#000000</color>
+    <color name="accent">#FFFFFF</color>
+    <color name="surface">#161616</color>
+    <color name="stroke">#66FFFFFF</color>
+    <color name="danger">#FF453A</color>
     <color name="text_primary">#FFFFFF</color>
     <color name="text_secondary">#B3B3B3</color>
     <color name="track">#4DFFFFFF</color>

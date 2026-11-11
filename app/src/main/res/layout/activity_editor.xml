@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:layoutDirection="ltr">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="12dp">
+
+        <!-- top bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <ImageButton
+                android:id="@+id/backBtn"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/cd_back"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/ed_title"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/pickBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_chip"
+                android:gravity="center"
+                android:paddingEnd="16dp"
+                android:paddingStart="16dp"
+                android:text="@string/ed_change"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- preview -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="8dp">
+
+            <com.simpleplayer.app.AspectFrameLayout
+                android:id="@+id/previewFrame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <TextureView
+                    android:id="@+id/textureView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.simpleplayer.app.CropOverlayView
+                    android:id="@+id/cropOverlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+            </com.simpleplayer.app.AspectFrameLayout>
+
+            <TextView
+                android:id="@+id/emptyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/ed_empty"
+                android:textColor="@color/text_secondary"
+                android:textSize="16sp" />
+        </FrameLayout>
+
+        <!-- crop presets -->
+        <HorizontalScrollView
+            android:id="@+id/cropRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/cropChips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingEnd="12dp"
+                android:paddingStart="12dp" />
+        </HorizontalScrollView>
+
+        <!-- play + time -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <ImageButton
+                android:id="@+id/playBtn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/cd_play_pause"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_play" />
+
+            <TextView
+                android:id="@+id/timeText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="0:00 / 0:00"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+
+            <ImageButton
+                android:id="@+id/zoomOut"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/ed_zoom_out"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_zoom_out" />
+
+            <ImageButton
+                android:id="@+id/zoomIn"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/ed_zoom_in"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_zoom_in" />
+        </LinearLayout>
+
+        <!-- timeline -->
+        <com.simpleplayer.app.TrimBarView
+            android:id="@+id/trimBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- start / length / end -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp">
+
+            <TextView
+                android:id="@+id/startText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/lengthText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/endText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- output mode -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <TextView
+                android:id="@+id/modeVideo"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_chip"
+                android:gravity="center"
+                android:text="@string/ed_mode_video"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/modeMute"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_chip"
+                android:gravity="center"
+                android:text="@string/ed_mode_mute"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/modeAudio"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_chip"
+                android:gravity="center"
+                android:text="@string/ed_mode_audio"
+                android:textColor="@color/text_primary"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- crop + save -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="12dp">
+
+            <Button
+                android:id="@+id/cropBtn"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_btn_outline"
+                android:drawableStart="@drawable/ic_crop"
+                android:drawablePadding="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:stateListAnimator="@null"
+                android:text="@string/ed_crop"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/saveBtn"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_accent"
+                android:stateListAnimator="@null"
+                android:text="@string/ed_save"
+                android:textAllCaps="false"
+                android:textColor="@color/bg"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- export progress -->
+    <LinearLayout
+        android:id="@+id/progressOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E6000000"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="32dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/progressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ed_exporting"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:max="100"
+            android:progressTint="@color/accent"
+            android:progressBackgroundTint="@color/track" />
+
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_btn_outline"
+            android:minWidth="160dp"
+            android:stateListAnimator="@null"
+            android:text="@string/ed_cancel"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:textSize="15sp" />
+    </LinearLayout>
+</FrameLayout>

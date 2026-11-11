@@ -2,12 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:supportsRtl="false"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
         <!-- Home: pick files, or receive "Open with" from other apps. Routes by file type. -->
@@ -43,5 +48,26 @@
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode"
             android:exported="false"
             android:theme="@style/VideoTheme" />
+
+        <!-- Screen recorder UI. -->
+        <activity
+            android:name=".RecorderActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Video trimmer UI. -->
+        <activity
+            android:name=".EditorActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name=".ScreenRecorderService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection|microphone" />
     </application>
 </manifest>
